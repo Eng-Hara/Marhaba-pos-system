@@ -1,17 +1,18 @@
 import axios from 'axios'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+// 🔴 BEDDEL 1: API URL (waxaad ka keenaysaa .env)
+const API_URL = import.meta.env.VITE_API_URL
 
 // Create axios instance
 const api = axios.create({
-  baseURL: API_URL,
+  baseURL: API_URL, // 🔴 BEDDEL 2: wuxuu isticmaalaa Render URL (env)
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },
 })
 
-// Request interceptor to add token
+// Request interceptor (NO CHANGE)
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token')
@@ -33,11 +34,13 @@ api.interceptors.response.use(
       window.location.href = '/login'
     }
 
-    // Network error
+    // 🔴 BEDDEL 3: Network error message (simplified)
     if (!error.response) {
-      console.error('⚠️ Network error. Could not reach backend:', error)
-      alert('Network error: Backend is not reachable. Check if the server is running on port 5000.')
-      return Promise.reject(new Error('Network error. Please check your backend connection.'))
+      console.error('Network error:', error)
+
+      alert('Network error: Unable to reach server.') // 🔴 BEDDEL 4
+
+      return Promise.reject(new Error('Network error'))
     }
 
     // Other errors
